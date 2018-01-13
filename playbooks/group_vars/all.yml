@@ -1,0 +1,14 @@
+---
+
+sparkGroup: spark
+sparkUser: spark
+
+sparkVersion: 2.2.1
+sparkHadoopVersion: 2.7
+
+sparkDownloadUrl: "https://www.apache.org/dyn/closer.lua/spark/spark-{{ sparkVersion }}/spark-{{ sparkVersion }}-bin-hadoop{{ sparkHadoopVersion }}.tgz"
+
+# spark install path
+sparkInstallPath: /opt
+
+sparkWorkerCores: 1

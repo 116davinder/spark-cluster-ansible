@@ -1,0 +1,12 @@
+[Unit]
+Description=spark daemon
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User={{ sparkUser }}
+ExecStart={{ sparkInstallPath }}/spark-{{ sparkVersion }}-bin-hadoop{{ sparkHadoopVersion }}/bin/spark-class org.apache.spark.deploy.master.Master --ip 0.0.0.0
+Environment= "SPARK_HOME={{ sparkInstallPath }}/spark-{{ sparkVersion }}-bin-hadoop{{ sparkHadoopVersion }}" "JAVA_HOME={{ javaHomeLocation.stdout }}"
+
+[Install]
+WantedBy=multi-user.target

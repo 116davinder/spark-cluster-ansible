@@ -1,0 +1,60 @@
+---
+
+- name: Creating spark Group | {{ sparkGroup }}
+  group:
+    name: "{{ sparkGroup }}"
+    state: present
+
+- name: Creating spark User | {{ sparkUser }}
+  user:
+    name: "{{ sparkUser }}"
+    state: present
+    group: "{{ sparkGroup }}"
+
+- name: Creating spark Installation Path Folder
+  file:
+    path: "{{ sparkInstallPath }}"
+    state: directory
+    recurse: True
+
+- name: Installing OpenJDK8 Java
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - java-1.8.0-openjdk
+    - java-1.8.0-openjdk-devel
+
+- name: Installing Scala
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - scala
+
+- name: Downloading Spark | {{ sparkVersion }}
+  unarchive:
+    src: "{{ sparkDownloadUrl }}"
+    dest: "{{ sparkInstallPath }}"
+    group: "{{ sparkGroup }}"
+    user: "{{ sparkUser }}"
+    remote_src: yes
+
+- name: Getting Java Home Path from System
+  shell: "readlink -fsq $(which java) | sed 's:/jre/bin/java::'"
+  register: javaHomeLocation
+
+- name: Creating Spark Env File
+  template:
+    src: spark-env.sh.j2
+    dest: "{{ sparkInstallPath }}/spark-{{ sparkVersion }}-bin-hadoop{{ sparkHadoopVersion }}/config/spark-env.sh"
+    group: "{{ sparkGroup }}"
+    user: "{{ sparkUser }}"
+
+# TODO ... support dynamic worker to spark cluster
+# - name: Creating Spark Slaves Files
+#   template:
+#     src: slaves.j2
+#     dest: "{{ sparkInstallPath }}/spark-{{ sparkVersion }}-bin-hadoop{{ sparkHadoopVersion }}/config/slaves"
+#     group: "{{ sparkGroup }}"
+#     user: "{{ sparkUser }}"

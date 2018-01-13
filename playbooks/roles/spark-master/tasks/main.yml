@@ -1,0 +1,13 @@
+---
+
+- name: Creating Service File | Spark Master
+  template:
+    src: service.j2
+    dest: /usr/lib/systemd/system/spark-master.service
+
+- name: Starting Spark Master Service
+  systemd:
+    name: spark-master
+    state: started
+    enabled: true
+    daemon_reload: true

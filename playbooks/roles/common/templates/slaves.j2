@@ -1,0 +1,3 @@
+{% for slaves in groups['spark-worker'] %}
+{{ hostvars[slaves].inventory_hostname }}        
+{% endfor %}

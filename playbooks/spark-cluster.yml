@@ -1,0 +1,19 @@
+- hosts: spark-nodes
+  gather_facts: True
+  become: True
+  roles:
+    - common
+
+- hosts: spark-master
+  gather_facts: False
+  become: True
+  serial: 1
+  roles:
+    - spark-master
+
+- hosts: spark-worker
+  gather_facts: False
+  become: True
+  serial: 1
+  roles:
+    - spark-worker

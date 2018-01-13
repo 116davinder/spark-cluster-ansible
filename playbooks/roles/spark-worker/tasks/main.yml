@@ -1,0 +1,13 @@
+---
+
+- name: Creating Service File | Spark Worker
+  template:
+    src: service.j2
+    dest: /usr/lib/systemd/system/spark-worker.service
+
+- name: Starting Spark Worker Service
+  systemd:
+    name: spark-worker
+    state: started
+    enabled: true
+    daemon_reload: true
